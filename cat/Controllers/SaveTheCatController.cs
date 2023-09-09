@@ -1,6 +1,5 @@
 ﻿using cat.infra;
 using cat.infra.modelo;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace cat.Controllers
@@ -9,29 +8,33 @@ namespace cat.Controllers
     [ApiController]
     public class SaveTheCatController : ControllerBase
     {
+        private readonly RepositorioDados _repositorioDados;
+
+        public SaveTheCatController(RepositorioDados repositorioDados)
+        {
+            _repositorioDados = repositorioDados;
+        }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            var gatos = new List<Gatinho>();
+            var result = await _repositorioDados.GetCats(new FiltroGatinho());
 
-            return Ok(new repositorio_de_dados().GetCATS(new CatFilter()));         
-            
+            return Ok(result);                  
         }
         
         [HttpPost]
-        public IActionResult SaveTheCat([FromBody] Gatinho gatista)
+        public async Task<IActionResult> SaveTheCat([FromBody] Gatinho gatinho)
         {
-            return Ok(new repositorio_de_dados().SaveTheCat(gatista));
+            var result = await _repositorioDados.SaveCat(gatinho);
+            return Ok(result);
         }
-        [HttpPost(Name = "SaveLosGatos")]        
-        public IActionResult SaveLosGatos([FromBody] Gatinho[] animal)
+        [HttpPost("SaveLosGatos")]        
+        public async Task<IActionResult> SaveLosGatos([FromBody] List<Gatinho> gatinhos)
         {
-            var repo = new repositorio_de_dados();
-            foreach (var item in animal)
+            foreach (var gato in gatinhos)
             {
-                repo.SaveTheCat(item);
-                repo.conn = "";
+               await _repositorioDados.SaveCat(gato);
             }
             return Ok(true);
         }
