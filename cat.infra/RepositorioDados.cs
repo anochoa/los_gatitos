@@ -56,14 +56,7 @@ namespace cat.infra
 
         public async Task SalvarGato(List<Gatinho> gatos)
         {
-            var listaGatos = new StringBuilder();
-
-            foreach (Gatinho gato in gatos)
-            {
-                listaGatos.AppendFormat(gato.ToString());
-            }
-
-            string sqlParaInserirLote = $@"insert into osCat (id, url, width, height) values {listaGatos}";
+            string sqlParaInserirLote = ManipularSqlInserirLote(gatos);
 
             try
             {
@@ -109,6 +102,21 @@ namespace cat.infra
             RestClient cliente = new RestClient(urlBase);
 
             return cliente;
+        }
+
+        private string ManipularSqlInserirLote(List<Gatinho> gatos)
+        {
+            var listaGatos = new StringBuilder();
+
+            for (int item = 0; item < gatos.Count; item++)
+            {
+                if (item > 0) listaGatos.Append(",");
+                listaGatos.Append(gatos[item].ToString());
+            }
+
+            string sqlParaInserirLote = $@"insert into osCat (id, url, width, height) values {listaGatos}";
+
+            return sqlParaInserirLote;
         }
 
         /*
