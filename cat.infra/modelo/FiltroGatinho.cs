@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace cat.infra.modelo
+﻿namespace cat.infra.modelo
 {
     public class FiltroGatinho
     {
-        public int FiltroLimit { get; set; }
-        public FiltroGatinho() { FiltroLimit = 10; }
+        public int FiltroLimite { get; set; }
+        public FiltroGatinho() { FiltroLimite = 10; }
 
-        public FiltroGatinho(int limit)
+        public FiltroGatinho(int limite)
         {
-            if (limit < 0) throw new ArgumentOutOfRangeException(nameof(limit));
+            if (limite < 0) throw new ArgumentOutOfRangeException(nameof(limite));
 
-            FiltroLimit = limit;
+            FiltroLimite = limite;
         }
     }
 }
